@@ -112,7 +112,7 @@
                 <div class="main-right col-span-1 space-y-4">
                     <div class="p-4 bg-white border border-gray-200 rounded-lg">
                         <h3 class="mb-6 text-xl">People you may know</h3>
-
+                        <PeopleYouMayKnow />
                     </div>
 
                     <div class="p-4 bg-white border border-gray-200 rounded-lg">
@@ -178,3 +178,14 @@
                 </div>
             </div>
 </template>
+
+<script>
+import PeopleYouMayKnow from '../components/PeopleYouMayKnow.vue';
+
+export default{
+    'name': 'SearchView',
+    components: {
+        PeopleYouMayKnow
+    }
+}
+</script>
