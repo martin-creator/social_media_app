@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 
 from .forms import SignupForm
+from .models import User
 
 
 @api_view(['POST'])
@@ -24,12 +25,16 @@ def signup(request):
     })
 
     if form.is_valid():
-        form.save()
+        user = form.save()
+        user.is_active = False
+        user.save()
 
         # send verification email later
     else:
-        message = form.errors
+        message = form.errors.as_json()
 
+        print(message
+        
+        )
 
-
-    return JsonResponse({'message': message})
+    return JsonResponse({'message': message}, status=201, safe=False)

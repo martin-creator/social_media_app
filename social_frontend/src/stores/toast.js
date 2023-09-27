@@ -1,14 +1,14 @@
-import { definestore } from 'pinia'
+import { defineStore } from 'pinia'
 
-export const useToastStore = definestore({
+export const useToastStore = defineStore({
     id: 'toast',
 
     state: () => ({
         ms: 0,
         message: '',
         classes: '',
-        isVisible: false,
-}),
+        isVisible: false
+    }),
 
     actions: {
         showToast(ms, message, classes) {
@@ -18,7 +18,7 @@ export const useToastStore = definestore({
             this.isVisible = true
 
             setTimeout(() => {
-                this.classes += '-translate-y-28'
+                this.classes += ' -translate-y-28'
             }, 10)
 
             setTimeout(() => {
@@ -27,10 +27,7 @@ export const useToastStore = definestore({
 
             setTimeout(() => {
                 this.isVisible = false
-            }
-            , this.ms)
+            }, this.ms)
         }
     }
 })
-
-
