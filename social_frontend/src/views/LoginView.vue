@@ -26,7 +26,7 @@
                         </p>
 
                         <p class="font-bold">
-                            Don't have an account? <a href="#" class="underline">Click here</a> to create one!
+                            Don't have an account?  <RouterLink :to="{'name':'signup'}" class="underline">Click here</RouterLink> to create one!
                         </p>
                     </div>
                 </div>
