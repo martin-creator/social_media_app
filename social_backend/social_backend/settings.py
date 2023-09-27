@@ -62,8 +62,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'djangorestframework',
-    'djangorestframework_simplejwt',
+    'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
 ]
 
