@@ -1,3 +1,4 @@
+import email
 import uuid
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
@@ -37,3 +38,29 @@ class CustomUserManager(UserManager):
         return self._create_user(name, email, password, **extra_fields)
 
 # Create your models here.
+
+class User(AbstractBaseUser, PermissionsMixin):
+    '''
+    Custom user model that supports using email instead of username
+    It inherits from the AbstractBaseUser class which is a built-in class in Django that provides the core implementation of a user model.
+    It also inherits from the PermissionsMixin class which is a built-in class in Django that provides the implementation of the permissions model.
+
+    '''
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(unique=True) # unique=True is used to specify that the email field must be unique throughout the database.
+    name = models.CharField(max_length=255, default='', blank=True)
+    avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
+
+    is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+
+    date_joined = models.DateTimeField(default=timezone.now)
+    last_login = models.DateTimeField(default=timezone.now)
+
+    objects = CustomUserManager() # This is used to specify the custom user manager to use for managing the user accounts.
+
+    USERNAME_FIELD = 'email' # This is used to specify the field to use for logging in. In this case, we are using the email field.
+    EMAIL_FIELD = 'email' # This is used to specify the email field. In this case, we are using the email field.
+    REQUIRED_FIELDs = []
+    
