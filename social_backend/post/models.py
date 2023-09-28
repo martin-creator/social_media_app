@@ -1,6 +1,8 @@
+from time import time
 import uuid
 from django.db import models
 from account.models import User
+from django.utils.timesince import timesince
 
 # Create your models here.
 
@@ -21,5 +23,11 @@ class Post (models.Model):
 
     #likes
     #likes_count
+
+    class Meta:
+        ordering = ('-created_at',)
+
+    def created_at_formatted(self):
+        return timesince(self.created_at)
     
     
