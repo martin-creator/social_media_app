@@ -4,7 +4,7 @@
         <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
           <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full" />
   
-          <p><strong>Martin Eagle</strong></p>
+          <p><strong>{{ userStore.user.name }}</strong></p>
   
           <div class="mt-6 flex space-x-8 justify-around">
             <p class="text-xs text-gray-500">182 friends</p>
@@ -141,9 +141,18 @@
   import axios from "axios";
   import PeopleYouMayKnow from "../components/PeopleYouMayKnow.vue";
   import Trends from "../components/Trends.vue";
+  import {useUserStore} from "@/stores/user";
   
   export default {
-    name: "FeedView",
+    name: "ProfileView",
+    setup() {
+    const userStore = useUserStore();
+
+    return {
+      userStore,
+    };
+  },
+
     components: {
       PeopleYouMayKnow,
       Trends,
