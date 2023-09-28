@@ -6,7 +6,10 @@
           <a href="#" class="text-xl">Science Connect</a>
         </div>
 
-        <div class="menu-center flex space-x-12">
+        <div
+          class="menu-center flex space-x-12"
+          v-if="userStore.user.isAuthenticated"
+        >
           <a href="#" class="text-purple-700">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -77,9 +80,24 @@
         </div>
 
         <div class="menu-right">
-          <a href="#">
-            <img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
-          </a>
+          <template v-if="userStore.user.isAuthenticated">
+            <a href="#">
+              <img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
+            </a>
+          </template>
+
+          <template v-else>
+            <RouterLink
+              to="/login"
+              class="py-4 px-6 bg-gray-600 text-white rounded-lg mr-2"
+              >Log in</RouterLink
+            >
+            <RouterLink
+              to="/signup"
+              class="py-4 px-6 bg-purple-600 text-white rounded-lg"
+              >Sign up</RouterLink
+            >
+          </template>
         </div>
       </div>
     </div>
@@ -88,41 +106,37 @@
   <main class="px-8 py-6 bg-gray-100">
     <RouterView />
   </main>
-  
-  <Toast />
 
+  <Toast />
 </template>
 
 <script>
-import Toast from '@/components/Toast.vue'
-import {useUserStore} from '@/stores/user'
-import axios from 'axios'
+import Toast from "@/components/Toast.vue";
+import { useUserStore } from "@/stores/user";
+import axios from "axios";
 
 export default {
-
   setup() {
-    const userStore = useUserStore()
+    const userStore = useUserStore();
 
     return {
-      userStore
-    }
+      userStore,
+    };
   },
   components: {
-    Toast
+    Toast,
   },
 
   beforeCreate() {
-    this.userStore.initStore()
+    this.userStore.initStore();
 
-    const token = this.userStore.user.access
+    const token = this.userStore.user.access;
 
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {
-      axios.defaults.headers.common['Authorization'] = " "
+      axios.defaults.headers.common["Authorization"] = " ";
     }
-  }
-
-}
-
+  },
+};
 </script>

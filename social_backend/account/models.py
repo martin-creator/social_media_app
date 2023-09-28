@@ -48,7 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     '''
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True) # unique=True is used to specify that the email field must be unique throughout the database.
-    name = models.CharField(max_length=255, default='', blank=True)
+    name = models.CharField(max_length=255, default='', blank=True, null=True)
     avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
 
     is_active = models.BooleanField(default=True)

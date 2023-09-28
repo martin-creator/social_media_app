@@ -7,8 +7,8 @@
                     </div>
 
                     <div class="menu-right">
-                        <a href="#" class="py-4 px-6 bg-gray-600 text-white rounded-lg">Log in</a>
-                        <a href="#" class="py-4 px-6 bg-purple-600 text-white rounded-lg">Sign up</a>
+                        <RouterLink to="/login" class="py-4 px-6 bg-gray-600 text-white rounded-lg">Log in</RouterLink>
+                        <RouterLink to="/signup" class="py-4 px-6 bg-purple-600 text-white rounded-lg">Sign up</RouterLink>
                     </div>
                 </div>
             </div>
