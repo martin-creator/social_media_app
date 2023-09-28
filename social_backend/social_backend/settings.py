@@ -50,7 +50,7 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://127:5173",
+    "http://localhost:5173",
 ]
 
 CSRF_TRUSTED_ORIGINS = [

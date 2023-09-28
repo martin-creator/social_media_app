@@ -41,7 +41,7 @@ def signup(request):
 
     if form.is_valid():
         user = form.save()
-        user.is_active = False
+        user.is_active = True
         user.save()
 
         # send verification email later
