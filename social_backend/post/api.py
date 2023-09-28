@@ -10,3 +10,12 @@ def post_list(request):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
     return JsonResponse(serializer.data , safe=False) # safe=False is required for objects serialization because we have not serialized a single object but a list of objects.
+
+
+@api_view(['POST'])
+def post_create(request):
+    data = request.data
+
+    print(data)
+
+    return JsonResponse({'data': 'Post created successfully.'})
