@@ -5,6 +5,21 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from .forms import SignupForm
 from .models import User
 
+@api_view(['GET'])
+def me(request):
+    '''
+    A view for getting the current user's information.
+
+    '''
+    user = request.user
+
+    return JsonResponse({
+        'id': user.id,
+        'email': user.email,
+        'name': user.name,
+    })
+
+
 
 @api_view(['POST'])
 @authentication_classes([])
