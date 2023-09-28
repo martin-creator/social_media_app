@@ -181,8 +181,8 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
-        //   this.posts.unshift(response.data);
-        //   this.body = "";
+         this.posts.unshift(response.data);
+         this.body = "";
         })
         .catch((error) => {
           console.log("Error: ", error);
