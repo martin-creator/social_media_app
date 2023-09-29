@@ -19,8 +19,14 @@ def post_list(request):
 
 @api_view(['GET'])
 def post_list_profile(request, id):
-    posts = Post.objects.filter(created_by_id=id)
-    user = User.objects.get(pk=id)
+    user_ids = [request.user.id]
+
+    for user in request.user.friends.all():
+        user_ids.append(user.id)
+
+    posts = Post.objects.filter(created_by_id__in=list(user_ids))
+    # posts = Post.objects.filter(created_by_id=id)
+    # user = User.objects.get(pk=id)
 
     post_serializer = PostSerializer(posts, many=True)
     user_serializer = UserSerializer(user)
