@@ -1,30 +1,30 @@
 <template>
   <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-
     <div class="main-center col-span-3 space-y-4">
       <div class="bg-white border border-gray-200 rounded-lg">
         <form v-on:submit.prevent="submitForm" method="post">
-        <div class="p-4">
-          <textarea
-          v-model="body"
-            class="p-4 w-full bg-gray-100 rounded-lg"
-            placeholder="What are you thinking about?"
-          ></textarea>
-        </div>
+          <div class="p-4">
+            <textarea
+              v-model="body"
+              class="p-4 w-full bg-gray-100 rounded-lg"
+              placeholder="What are you thinking about?"
+            ></textarea>
+          </div>
 
-        <div class="p-4 border-t border-gray-100 flex justify-between">
-          <a
-            href="#"
-            class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
-            >Attach image</a
-          >
+          <div class="p-4 border-t border-gray-100 flex justify-between">
+            <a
+              href="#"
+              class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
+              >Attach image</a
+            >
 
-          <button
-            href="#"
-            class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
-            >Post</button
-          >
-        </div>
+            <button
+              href="#"
+              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
+            >
+              Post
+            </button>
+          </div>
         </form>
       </div>
 
@@ -40,14 +40,16 @@
               class="w-[40px] rounded-full"
             />
 
-            <p><strong>{{ post.created_by.name }}</strong></p>
+            <p>
+              <strong>{{ post.created_by.name }}</strong>
+            </p>
           </div>
 
           <p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
         </div>
 
         <p>
-          {{post.body}}
+          {{ post.body }}
         </p>
 
         <div class="my-6 flex justify-between">
@@ -132,7 +134,7 @@ import Trends from "../components/Trends.vue";
 
 export default {
   name: "FeedView",
-  
+
   components: {
     PeopleYouMayKnow,
     Trends,
@@ -170,14 +172,14 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
-         this.posts.unshift(response.data);
-         this.body = "";
+          this.posts.unshift(response.data);
+          this.body = "";
         })
         .catch((error) => {
           console.log("Error: ", error);
         });
 
-    console.log("Submitting form", this.body);
+      console.log("Submitting form", this.body);
     },
   },
 };
