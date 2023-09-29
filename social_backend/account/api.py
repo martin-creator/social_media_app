@@ -64,12 +64,20 @@ def send_friendship_request(request, pk):
     A view for sending a friendship request to another user.
 
     '''
-
     user = User.objects.get(pk=pk)
-    friendship_request = FriendshipRequest.objects.create(
-        created_for=user, created_by=request.user)
 
-    return JsonResponse({'message': 'Friendship request sent successfully.'}, status=201, safe=False)
+    check1 = FriendshipRequest.objects.filter(created_for=request.user).filter(created_by=user)
+    check2 = FriendshipRequest.objects.filter(created_for=user).filter(created_by=request.user)
+
+    if not check1 or not check2:
+        friendrequest = FriendshipRequest.objects.create(created_for=user, created_by=request.user)
+
+        #notification = create_notification(request, 'new_friendrequest', friendrequest_id=friendrequest.id)
+
+        return JsonResponse({'message': 'friendship request created'})
+    else:
+        return JsonResponse({'message': 'request already sent'})
+
 
 
 @api_view(['GET'])
@@ -103,12 +111,19 @@ def handle_request(request, pk, status):
     '''
     user = User.objects.get(pk=pk)
 
+
+    frs = FriendshipRequest.objects.filter(created_for=request.user).get(created_by=user)
     friendship_request = FriendshipRequest.objects.filter(
         created_for=request.user).get(created_by=user)
     friendship_request.status = status
     friendship_request.save()
 
     user.friends.add(request.user)
+    user.friends_count = user.friends.count + 1
     user.save()
+
+    request_user  = request.user
+    request_user.friends_count = request_user.friends.count + 1
+    request_user.save()
 
     return JsonResponse({'message': 'Friendship request updated successfully.'}, status=201, safe=False)

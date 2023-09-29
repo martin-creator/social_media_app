@@ -73,14 +73,17 @@
   import Trends from "../components/Trends.vue";
   import {useUserStore} from "@/stores/user";
   import FeedItem from "@/components/FeedItem.vue";
+  import {useToastStore} from "@/stores/toast";
   
   export default {
     name: "ProfileView",
     setup() {
     const userStore = useUserStore();
+    const toastStore = useToastStore();
 
     return {
       userStore,
+      toastStore
     };
   },
 
@@ -94,7 +97,9 @@
       return {
         posts: [],
         body: "",
-        user: {},
+        user: {
+          id: null
+        },
       };
     },
   
@@ -115,10 +120,15 @@
     methods: {
       sendFriendshipRequest(){
         axios
-        .post(`/api/friends/request/${this.$route.params.id}/`)
+        .post(`/api/friends/${this.$route.params.id}/request/`)
         .then((response) => {
           console.log(response.data);
           this.user = response.data.user;
+          if(response.data.message == 'request already sent'){
+            this.toastStore.showToast(5000, 'Request already sent', 'bg-red-500');
+          } else {
+            this.toastStore.showToast(5000, 'Request Sent', 'bg-green-500');
+          }
         })
         .catch((error) => {
           console.log("Error: ", error);

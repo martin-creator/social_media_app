@@ -117,14 +117,17 @@ import axios from "axios";
 import PeopleYouMayKnow from "../components/PeopleYouMayKnow.vue";
 import Trends from "../components/Trends.vue";
 import { useUserStore } from "@/stores/user";
+import { useToastStore } from "@/stores/toast";
 
 export default {
   name: "FriendsView",
   setup() {
     const userStore = useUserStore();
+    const toastStore = useToastStore();
 
     return {
       userStore,
+      toastStore,
     };
   },
 
@@ -167,6 +170,11 @@ export default {
         .then((response) => {
           //this.getFriends();
           console.log(response.data);
+          if(response.data.message == 'request already sent'){
+            this.toastStore.showToast(5000, 'Request already sent', 'bg-red-500');
+          } else {
+            this.toastStore.showToast(5000, 'Request Sent', 'bg-green-500');
+          }
         })
         .catch((error) => {
           console.log("Error: ", error);
