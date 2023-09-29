@@ -1,18 +1,4 @@
 <template>
-    <nav class="py-10 px-8 border-b border-gray-200">
-            <div class="max-w-7xl mx-auto">
-                <div class="flex items-center justify-between">
-                    <div class="menu-left">
-                        <a href="#" class="text-xl">Wey</a>
-                    </div>
-
-                    <div class="menu-right">
-                        <a href="#" class="py-4 px-6 bg-gray-600 text-white rounded-lg">Log in</a>
-                        <a href="#" class="py-4 px-6 bg-purple-600 text-white rounded-lg">Sign up</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
 
         <main class="px-8 py-6 bg-gray-100">
             <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">

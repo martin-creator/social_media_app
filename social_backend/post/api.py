@@ -1,5 +1,7 @@
 from django.http import JsonResponse
 from .models import Post
+from account.models import User
+from account.serializers import UserSerializer
 from .forms import PostForm
 from .serializers import PostSerializer
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
@@ -13,6 +15,17 @@ def post_list(request):
     serializer = PostSerializer(posts, many=True)
     # safe=False is required for objects serialization because we have not serialized a single object but a list of objects.
     return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['GET'])
+def post_list_profile(request, id):
+    posts = Post.objects.filter(created_by_id=id)
+    user = User.objects.get(pk=id)
+
+    post_serializer = PostSerializer(posts, many=True)
+    user_serializer = UserSerializer(user)
+
+    return JsonResponse({'posts': post_serializer.data, 'user': user_serializer.data}, safe=False)
 
 
 @api_view(['POST'])
