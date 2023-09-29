@@ -80,8 +80,9 @@ def friends(request, pk):
     '''
     user = User.objects.get(pk=pk)
     requests = []
+
     if user == request.user:
-        requests = FriendshipRequest.objects.filter(created_for=request.user)
+        requests = FriendshipRequest.objects.filter(created_for=request.user, status=FriendshipRequest.SENT)
         requests = FriendshipRequestSerializer(requests, many=True)
         requests = requests.data
 
@@ -92,3 +93,22 @@ def friends(request, pk):
         'friends': UserSerializer(friends, many=True).data,
         'requests': requests
     }, safe=False)
+
+
+@api_view (['POST'])
+def handle_request(request, pk, status):
+    '''
+    A view for handling friendship requests.
+
+    '''
+    user = User.objects.get(pk=pk)
+
+    friendship_request = FriendshipRequest.objects.filter(
+        created_for=request.user).get(created_by=user)
+    friendship_request.status = status
+    friendship_request.save()
+
+    user.friends.add(request.user)
+    user.save()
+
+    return JsonResponse({'message': 'Friendship request updated successfully.'}, status=201, safe=False)

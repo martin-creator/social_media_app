@@ -54,6 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255, default='', blank=True, null=True)
     avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
     friends = models.ManyToManyField('self', blank=True)
+    friends_count = models.IntegerField(default=0)
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)

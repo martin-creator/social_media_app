@@ -17,51 +17,85 @@
 
     <div class="main-center col-span-2 space-y-4 mb-4">
       <div
-        class="p-4 text-center bg-white-100 rounded-lg"
-        v-for="friendshipRequest in friendshipRequests"
-        v-bind:key="friendshipRequest.id"
+        class="p-4 bg-white border border-gray-200 rounded-lg"
+        v-if="friendshipRequests.length"
       >
-        <img
-          src="https://i.pravatar.cc/100?img=70"
-          class="mb-6 mx-auto rounded-full"
-        />
+        <h2 class="mb-6 text-xl">Friendship requests</h2>
+        <div
+          class="p-4 text-center bg-white-100 rounded-lg"
+          v-for="friendshipRequest in friendshipRequests"
+          v-bind:key="friendshipRequest.id"
+        >
+          <img
+            src="https://i.pravatar.cc/100?img=70"
+            class="mb-6 mx-auto rounded-full"
+          />
+
+          <p>
+            <strong>
+              <RouterLink
+                :to="{
+                  name: 'profile',
+                  params: { id: friendshipRequest.created_by.id },
+                }"
+                >{{ friendshipRequest.created_by.name }}</RouterLink
+              >
+            </strong>
+          </p>
+
+          <div class="mt-6 flex space-x-8 justify-around">
+            <!-- <p class="text-xs text-gray-500">{{ user.friends_count }} friends</p>
+                        <p class="text-xs text-gray-500">{{ user.posts_count }} posts</p> -->
+            <p class="text-xs text-gray-500">182 friends</p>
+            <p class="text-xs text-gray-500">120 posts</p>
+          </div>
+
+          <div class="mt-6 space-x-4">
+            <button
+              class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
+              @click="
+                handleRequest('accepted', friendshipRequest.created_by.id)
+              "
+            >
+              Accept
+            </button>
+            <button
+              class="inline-block py-4 px-6 bg-red-600 text-white rounded-lg"
+              @click="
+                handleRequest('rejected', friendshipRequest.created_by.id)
+              "
+            >
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div
+      class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-2 gap-4"
+      v-if="friends.length"
+    >
+      <div
+        class="p-4 text-center bg-gray-100 rounded-lg"
+        v-for="user in friends"
+        v-bind:key="user.id"
+      >
+        <img src="https://i.pravatar.cc/100?img=70" class="mb-6 rounded-full text-center" />
 
         <p>
           <strong>
-            <RouterLink
-              :to="{
-                name: 'profile',
-                params: { id: friendshipRequest.created_by.id },
-              }"
-              >{{ friendshipRequest.created_by.name }}</RouterLink
-            >
+            <RouterLink :to="{ name: 'profile', params: { id: user.id } }">{{
+              user.name
+            }}</RouterLink>
           </strong>
         </p>
 
         <div class="mt-6 flex space-x-8 justify-around">
-          <!-- <p class="text-xs text-gray-500">{{ user.friends_count }} friends</p>
-                        <p class="text-xs text-gray-500">{{ user.posts_count }} posts</p> -->
-          <p class="text-xs text-gray-500">182 friends</p>
-          <p class="text-xs text-gray-500">120 posts</p>
-        </div>
-
-        <div class="mt-6 space-x-4">
-          <button
-            class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
-            @click="handleRequest('accepted', friendshipRequest.created_by.id)"
-          >
-            Accept
-          </button>
-          <button
-            class="inline-block py-4 px-6 bg-red-600 text-white rounded-lg"
-            @click="handleRequest('rejected', friendshipRequest.created_by.id)"
-          >
-            Reject
-          </button>
+          <p class="text-xs text-gray-500">{{ user.friends_count }} friends</p>
+          <p class="text-xs text-gray-500"> 5 posts</p>
         </div>
       </div>
-
-      <hr />
+    </div>
     </div>
 
     <div class="main-right col-span-1 space-y-4">
@@ -120,6 +154,18 @@ export default {
           this.friendshipRequests = response.data.requests;
           this.friends = response.data.friends;
           this.user = response.data.user;
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log("Error: ", error);
+        });
+    },
+
+    handleRequest(status, pk) {
+      axios
+        .post(`/api/friends/${pk}/${status}/`)
+        .then((response) => {
+          //this.getFriends();
           console.log(response.data);
         })
         .catch((error) => {
