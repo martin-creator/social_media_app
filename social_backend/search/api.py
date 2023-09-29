@@ -17,7 +17,7 @@ def search(request):
     matching_users = User.objects.filter(name__icontains=query)
 
     # Then, filter Post objects based on the users found in the previous step
-    posts = Post.objects.filter(body__icontains=query, created_by__in=matching_users) &  Post.objects.all()[:5]
+    posts = Post.objects.filter(body__icontains=query)
 
     posts_serializer = PostSerializer(posts, many=True)
 
