@@ -1,10 +1,12 @@
+import re
+from venv import create
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 
 from .forms import SignupForm
-from .models import User,FriendshipRequest
-from .serializers import UserSerializer
+from .models import User, FriendshipRequest
+from .serializers import UserSerializer, FriendshipRequestSerializer
 
 
 @api_view(['GET'])
@@ -64,6 +66,29 @@ def send_friendship_request(request, pk):
     '''
 
     user = User.objects.get(pk=pk)
-    friendship_request = FriendshipRequest.objects.create(created_for=user, created_by=request.user)
+    friendship_request = FriendshipRequest.objects.create(
+        created_for=user, created_by=request.user)
 
     return JsonResponse({'message': 'Friendship request sent successfully.'}, status=201, safe=False)
+
+
+@api_view(['GET'])
+def friends(request, pk):
+    '''
+    A view for getting a user's friends.
+
+    '''
+    user = User.objects.get(pk=pk)
+    requests = []
+    if user == request.user:
+        requests = FriendshipRequest.objects.filter(created_for=request.user)
+        requests = FriendshipRequestSerializer(requests, many=True)
+        requests = requests.data
+
+    friends = user.friends.all()
+
+    return JsonResponse({
+        'user': UserSerializer(user).data,
+        'friends': UserSerializer(friends, many=True).data,
+        'requests': requests
+    }, safe=False)
