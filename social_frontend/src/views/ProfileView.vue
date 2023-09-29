@@ -10,6 +10,9 @@
             <p class="text-xs text-gray-500">182 friends</p>
             <p class="text-xs text-gray-500">120 posts</p>
           </div>
+          <div class="mt-6">
+            <button class="inline-block py-4 px-3 bg-purple-600 text-xs text-white rounded-lg" @click="sendFriendshipRequest"> Send friend request</button>
+          </div>
         </div>
       </div>
   
@@ -98,7 +101,7 @@
     mounted() {
       this.getFeed();
     },
-    
+
     watch: { 
         '$route.params.id': {
             handler: function() {
@@ -110,6 +113,18 @@
     },
   
     methods: {
+      sendFriendshipRequest(){
+        axios
+        .post(`/api/friends/request/${this.$route.params.id}/`)
+        .then((response) => {
+          console.log(response.data);
+          this.user = response.data.user;
+        })
+        .catch((error) => {
+          console.log("Error: ", error);
+        });
+
+      },
       getFeed() {
         console.log("Getting feed");
         axios

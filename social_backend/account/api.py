@@ -3,7 +3,9 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 
 from .forms import SignupForm
-from .models import User
+from .models import User,FriendshipRequest
+from .serializers import UserSerializer
+
 
 @api_view(['GET'])
 def me(request):
@@ -18,7 +20,6 @@ def me(request):
         'email': user.email,
         'name': user.name,
     })
-
 
 
 @api_view(['POST'])
@@ -49,7 +50,20 @@ def signup(request):
         message = form.errors.as_json()
 
         print(message
-        
-        )
+
+              )
 
     return JsonResponse({'message': message}, status=201, safe=False)
+
+
+@api_view(['POST'])
+def send_friendship_request(request, pk):
+    '''
+    A view for sending a friendship request to another user.
+
+    '''
+
+    user = User.objects.get(pk=pk)
+    friendship_request = FriendshipRequest.objects.create(created_for=user, created_by=request.user)
+
+    return JsonResponse({'message': 'Friendship request sent successfully.'}, status=201, safe=False)
