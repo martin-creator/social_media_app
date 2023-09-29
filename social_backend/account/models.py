@@ -1,9 +1,12 @@
 import email
+from enum import auto
+from http.client import ACCEPTED
 import uuid
-
+from account.models import User
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.db import models
 from django.utils import timezone
+
 
 
 
@@ -50,6 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True) # unique=True is used to specify that the email field must be unique throughout the database.
     name = models.CharField(max_length=255, default='', blank=True, null=True)
     avatar = models.ImageField(upload_to='avatars', null=True, blank=True)
+    friends = models.ManyToManyField('self', blank=True)
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -63,4 +67,28 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email' # This is used to specify the field to use for logging in. In this case, we are using the email field.
     EMAIL_FIELD = 'email' # This is used to specify the email field. In this case, we are using the email field.
     REQUIRED_FIELDs = []
+
+
+    class FriendshipRequest(models.Model):
+        '''
+        Model for friendship requests
+
+        '''
+
+    SENT = 'sent'
+    ACCEPTED = 'accepted'
+    REJECTED = 'rejected'
+
+    STATUS_CHOICES = (
+        (SENT, 'Sent'),
+        (ACCEPTED, 'Accepted'),
+        (REJECTED, 'Rejected')
+    )
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_for = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_friendrequests')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_friendrequests')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=SENT)
+
     
