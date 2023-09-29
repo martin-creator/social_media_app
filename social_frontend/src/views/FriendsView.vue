@@ -36,7 +36,7 @@
   import PeopleYouMayKnow from "../components/PeopleYouMayKnow.vue";
   import Trends from "../components/Trends.vue";
   import {useUserStore} from "@/stores/user";
-  import FeedItem from "@/components/FeedItem.vue";
+
   
   export default {
     name: "FriendsView",
@@ -56,6 +56,9 @@
   
     data() {
       return {
+        user: {},
+        friendshipRequests: [],
+        friends: [],
       };
     },
   
@@ -64,7 +67,21 @@
 
   
     methods: {
-      
+      getFriends() {
+        console.log("Getting feed");
+        axios
+          .get(`/api/posts/profile/${this.$route.params.id}/friends`)
+          .then((response) => {
+            this.friendshipRequests = response.data.requests;
+            this.friends = response.data.friends;
+            this.user = response.data.user;
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.log("Error: ", error);
+          });
+      },
+  
     },
   };
   </script>
