@@ -1,13 +1,15 @@
 from django.forms import ModelForm
-from .models import Post
+
+from .models import Post, PostAttachment
 
 
 class PostForm(ModelForm):
-    '''
-    A form for creating new posts.
-    
-    '''
-
     class Meta:
         model = Post
-        fields = ['body',]
+        fields = ('body', 'is_private',)
+
+
+class AttachmentForm(ModelForm):
+    class Meta:
+        model = PostAttachment
+        fields = ('image',)

@@ -28,8 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+WEBSITE_URL = 'http://127.0.0.1:8000'
+
 
 # Application definition
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -43,10 +47,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    ),
+    )
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -64,12 +67,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'account',
+    'chat',
+    'notification',
+    'post',
+    'search',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
-    'account',
-    'post',
-    'search',
 ]
 
 MIDDLEWARE = [
@@ -84,8 +89,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'social_backend.urls'
-
-CORS_ALLOW_ALL_ORIGINS = True
 
 TEMPLATES = [
     {
@@ -152,6 +155,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

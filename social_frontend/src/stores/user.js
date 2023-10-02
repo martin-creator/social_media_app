@@ -1,52 +1,56 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
-
 
 export const useUserStore = defineStore({
     id: 'user',
 
-
     state: () => ({
-        user : {
+        user: {
             isAuthenticated: false,
             id: null,
             name: null,
             email: null,
             access: null,
             refresh: null,
+            avatar: null
         }
     }),
 
     actions: {
         initStore() {
-            if(localStorage.getItem('User.access')) {
-                this.user.access = localStorage.getItem('User.access')
-                this.user.refresh = localStorage.getItem('User.refresh')
-                this.user.id = localStorage.getItem('User.id')
-                this.user.name = localStorage.getItem('User.name')
-                this.user.email = localStorage.getItem('User.email')
+            console.log('initStore', localStorage.getItem('user.access'))
+
+            if (localStorage.getItem('user.access')) {
+                console.log('User has access!')
+
+                this.user.access = localStorage.getItem('user.access')
+                this.user.refresh = localStorage.getItem('user.refresh')
+                this.user.id = localStorage.getItem('user.id')
+                this.user.name = localStorage.getItem('user.name')
+                this.user.email = localStorage.getItem('user.email')
+                this.user.avatar = localStorage.getItem('user.avatar')
                 this.user.isAuthenticated = true
 
                 this.refreshToken()
 
-                console.log('Initialized User', this.user)
-                
-                
+                console.log('Initialized user:', this.user)
             }
         },
 
-        setToken(data){
+        setToken(data) {
             console.log('setToken', data)
 
             this.user.access = data.access
             this.user.refresh = data.refresh
             this.user.isAuthenticated = true
 
-            localStorage.setItem('User.access', data.access)
-            localStorage.setItem('User.refresh', data.refresh)
+            localStorage.setItem('user.access', data.access)
+            localStorage.setItem('user.refresh', data.refresh)
+
+            console.log('user.access: ', localStorage.getItem('user.access'))
         },
 
-        removeToken(){
+        removeToken() {
             console.log('removeToken')
 
             this.user.refresh = null
@@ -55,49 +59,48 @@ export const useUserStore = defineStore({
             this.user.id = null
             this.user.name = null
             this.user.email = null
+            this.user.avatar = null
 
-            localStorage.removeItem('User.access')
-            localStorage.removeItem('User.refresh')
-            localStorage.removeItem('User.id')
-            localStorage.removeItem('User.name')
-            localStorage.removeItem('User.email')
+            localStorage.setItem('user.access', '')
+            localStorage.setItem('user.refresh', '')
+            localStorage.setItem('user.id', '')
+            localStorage.setItem('user.name', '')
+            localStorage.setItem('user.email', '')
+            localStorage.setItem('user.avatar', '')
         },
 
-        setUserInfo(user){
+        setUserInfo(user) {
             console.log('setUserInfo', user)
 
             this.user.id = user.id
             this.user.name = user.name
             this.user.email = user.email
+            this.user.avatar = user.avatar
 
-            localStorage.setItem('User.id', user.id)
-            localStorage.setItem('User.name', user.name)
-            localStorage.setItem('User.email', user.email)
+            localStorage.setItem('user.id', this.user.id)
+            localStorage.setItem('user.name', this.user.name)
+            localStorage.setItem('user.email', this.user.email)
+            localStorage.setItem('user.avatar', this.user.avatar)
 
             console.log('User', this.user)
         },
 
-        refreshToken(){
-            console.log('refreshToken')
-
-            axios.post('api/refresh/', {
+        refreshToken() {
+            axios.post('/api/refresh/', {
                 refresh: this.user.refresh
             })
-            .then((response) => {
-                this.user.access = response.data.access
-                localStorage.setItem('User.access', response.data.access)
+                .then((response) => {
+                    this.user.access = response.data.access
 
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access
-            })
-            .catch((error) => {
-                console.log('refreshToken', error)
+                    localStorage.setItem('user.access', response.data.access)
 
-                this.removeToken()
-            })
-        }
+                    axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
+                })
+                .catch((error)=>{
+                    console.log(error)
 
+                    this.removeToken()
+                })
+        },
     }
 })
-
-
-
