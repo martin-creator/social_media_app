@@ -1,26 +1,32 @@
 <template>
-    <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-        <div class="main-center col-span-3 space-y-4">
-            <div 
-                class="p-4 bg-white border border-gray-200 rounded-lg"
-                v-for="notification in notifications"
-                v-bind:key="notification.id"
-                v-if="notifications.length"
-            >
-                {{ notification.body }} 
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+    <div class="main-center col-span-1 md:col-span-2 lg:col-span-3 space-y-4">
+      <div
+        class="p-4 bg-white border border-gray-200 rounded-lg"
+        v-for="notification in notifications"
+        :key="notification.id"
+        v-if="notifications.length"
+      >
+        <p class="text-gray-700">{{ notification.body }}</p>
 
-                <button class="underline" @click="readNotification(notification)">Read more</button>
-            </div>
+        <button
+          class="text-purple-600 underline mt-2 inline-block"
+          @click="readNotification(notification)"
+        >
+          Read more
+        </button>
+      </div>
 
-            <div 
-                class="p-4 bg-white border border-gray-200 rounded-lg"
-                v-else
-            >
-                You don't have any unread notifications!
-            </div>
-        </div>
+      <div
+        class="p-4 bg-white border border-gray-200 rounded-lg text-center"
+        v-else
+      >
+        You don't have any unread notifications!
+      </div>
     </div>
+  </div>
 </template>
+
 
 <script>
 import axios from 'axios'

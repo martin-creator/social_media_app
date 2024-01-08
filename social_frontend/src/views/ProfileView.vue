@@ -1,79 +1,87 @@
 <template>
-    <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-        <div class="main-left col-span-1">
-            <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
-                <img :src="user.get_avatar" class="mb-6 rounded-full">
-                
-                <p><strong>{{ user.name }}</strong></p>
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+    <div class="main-left md:col-span-1">
+      <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
+        <img :src="user.get_avatar" class="mb-6 rounded-full">
 
-                <div class="mt-6 flex space-x-8 justify-around" v-if="user.id">
-                    <RouterLink :to="{name: 'friends', params: {id: user.id}}" class="text-xs text-gray-500">{{ user.friends_count }} friends</RouterLink>
-                    <p class="text-xs text-gray-500">{{ user.posts_count }} posts</p>
-                </div>
+        <p class="text-lg font-semibold">{{ user.name }}</p>
 
-                <div class="mt-6">
-                    <button 
-                        class="inline-block py-4 px-3 bg-purple-600 text-xs text-white rounded-lg" 
-                        @click="sendFriendshipRequest"
-                        v-if="userStore.user.id !== user.id && can_send_friendship_request"
-                    >
-                        Send friendship request
-                    </button>
-
-                    <button 
-                        class="inline-block mt-4 py-4 px-3 bg-purple-600 text-xs text-white rounded-lg" 
-                        @click="sendDirectMessage"
-                        v-if="userStore.user.id !== user.id"
-                    >
-                        Send direct message
-                    </button>
-
-                    <RouterLink 
-                        class="inline-block mr-2 py-4 px-3 bg-purple-600 text-xs text-white rounded-lg" 
-                        to="/profile/edit"
-                        v-if="userStore.user.id === user.id"
-                    >
-                        Edit profile
-                    </RouterLink>
-
-                    <button 
-                        class="inline-block py-4 px-3 bg-red-600 text-xs text-white rounded-lg" 
-                        @click="logout"
-                        v-if="userStore.user.id === user.id"
-                    >
-                        Log out
-                    </button>
-                </div>
-            </div>
+        <div class="mt-2 flex space-x-4 text-gray-500 text-sm">
+          <RouterLink
+            :to="{ name: 'friends', params: { id: user.id } }"
+            class="flex items-center"
+          >
+            <span>{{ user.friends_count }}</span>
+            <span class="ml-1">Friends</span>
+          </RouterLink>
+          <span class="flex items-center">
+            {{ user.posts_count }}
+            <span class="ml-1">Posts</span>
+          </span>
         </div>
 
-        <div class="main-center col-span-2 space-y-4">
-            <div 
-                class="bg-white border border-gray-200 rounded-lg"
-                v-if="userStore.user.id === user.id"
-            >
-                <FeedForm 
-                    v-bind:user="user" 
-                    v-bind:posts="posts"
-                />
-            </div>
-
-            <div 
-                class="p-4 bg-white border border-gray-200 rounded-lg"
-                v-for="post in posts"
-                v-bind:key="post.id"
-            >
-                <FeedItem v-bind:post="post" v-on:deletePost="deletePost"/>
-            </div>
+        <div class="mt-6 space-y-2">
+          <button
+            v-if="userStore.user.id !== user.id && can_send_friendship_request"
+            class="block w-full py-2 bg-purple-600 text-white rounded-md"
+            @click="sendFriendshipRequest"
+          >
+            Send Friendship Request
+          </button>
+          <button
+            v-if="userStore.user.id !== user.id"
+            class="block w-full py-2 bg-purple-600 text-white rounded-md"
+            @click="sendDirectMessage"
+          >
+            Send Direct Message
+          </button>
+          <RouterLink
+            v-if="userStore.user.id === user.id"
+            class="block w-full py-2 bg-purple-600 text-white rounded-md"
+            to="/profile/edit"
+          >
+            Edit Profile
+          </RouterLink>
+          <button
+            v-if="userStore.user.id === user.id"
+            class="block w-full py-2 bg-red-600 text-white rounded-md"
+            @click="logout"
+          >
+            Log Out
+          </button>
         </div>
-
-        <div class="main-right col-span-1 space-y-4">
-            <PeopleYouMayKnow />
-
-            <Trends />
-        </div>
+      </div>
     </div>
+
+    <div class="main-center md:col-span-2 space-y-4">
+      <div
+        v-if="userStore.user.id === user.id"
+        class="bg-white border border-gray-200 rounded-lg p-4"
+      >
+        <FeedForm v-bind:user="user" v-bind:posts="posts" />
+      </div>
+
+      <div
+        v-for="post in posts"
+        :key="post.id"
+        class="p-4 bg-white border border-gray-200 rounded-lg"
+      >
+        <FeedItem v-bind:post="post" v-on:deletePost="deletePost" />
+      </div>
+    </div>
+
+    <div class="main-right md:col-span-1 space-y-4">
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <PeopleYouMayKnow />
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <Trends />
+      </div>
+    </div>
+  </div>
 </template>
+
 
 <style>
 input[type="file"] {
