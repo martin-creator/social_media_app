@@ -4,6 +4,14 @@ Welcome to SciNet, where scientists from around the globe come together for coll
 
 Live demo: [https://scinet.netlify.app](https://scinet.netlify.app)
 
+## Screenshots
+![image](./images/Sci_1.png)
+![image](./images/Sci_2.png)
+![image](./images/Sci_3.png)
+![image](./images/Sci_4.png)
+![image](./images/Sci_5.png)
+![image](./images/Sci_6.png)
+
 ## Key Features
 
 - **Discover Research:** Explore a vast array of cutting-edge research topics and stay informed about the latest advancements in your field.
